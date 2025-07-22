@@ -75,10 +75,10 @@
           Here are some of my recent projects that showcase my skills and experience.
         </p>
       </div>
-      <div class="projects__grid">
+      <div class="projects__grid" *ngIf="!isLoading && !errorMessage">
         <div *ngFor="let project of featuredProjects" class="project-card">
           <div class="project-card__image">
-            <img [src]="project.image" 
+            <img [src]="project.imageUrl" 
                  [alt]="project.title"
                  class="project-img">
             <div class="project-card__overlay">
@@ -86,13 +86,15 @@
                 <a [href]="project.liveUrl" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   class="btn btn--primary btn--small">
+                   class="btn btn--primary btn--small"
+                   *ngIf="project.liveUrl">
                   Live Demo
                 </a>
                 <a [href]="project.githubUrl" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   class="btn btn--secondary btn--small">
+                   class="btn btn--secondary btn--small"
+                   *ngIf="project.githubUrl">
                   <i class="fab fa-github"></i> Code
                 </a>
               </div>
@@ -107,6 +109,16 @@
             </div>
           </div>
         </div>
+      </div>
+      
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="loading-state text--center">
+        <p>Loading featured projects...</p>
+      </div>
+      
+      <!-- Error state -->
+      <div *ngIf="errorMessage" class="error-state text--center">
+        <p class="error-message">{{ errorMessage }}</p>
       </div>
       <div class="section-footer text--center">
         <a routerLink="/projects" class="btn btn--primary">
