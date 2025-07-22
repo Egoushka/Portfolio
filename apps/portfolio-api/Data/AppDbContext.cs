@@ -53,8 +53,8 @@ public class AppDbContext : DbContext
                   .HasMaxLength(200);
             entity.Property(e => e.Tags)
                   .HasConversion(
-                      v => string.Join(',', v),
-                      v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                      v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                      v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>()
                   );
 
             // Create unique index on slug
