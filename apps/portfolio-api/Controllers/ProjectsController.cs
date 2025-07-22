@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Portfolio.PortfolioApi.Models;
+using Portfolio.PortfolioApi.Data;
 
 namespace Portfolio.PortfolioApi.Controllers;
 
@@ -8,10 +10,12 @@ namespace Portfolio.PortfolioApi.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly ILogger<ProjectsController> _logger;
+    private readonly AppDbContext _context;
 
-    public ProjectsController(ILogger<ProjectsController> logger)
+    public ProjectsController(ILogger<ProjectsController> logger, AppDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     /// <summary>
@@ -20,49 +24,19 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectInfo>>> GetProjects()
     {
-        // Mock data - in a real app, this would come from a database
-        var projects = new List<ProjectInfo>
+        try
         {
-            new ProjectInfo
-            {
-                Id = 1,
-                Title = "E-Commerce Platform",
-                Description = "Full-stack e-commerce solution with Angular frontend and .NET backend",
-                Technologies = new List<string> { "Angular", ".NET Core", "SQL Server", "Azure" },
-                ImageUrl = "assets/images/project1.jpg",
-                LiveUrl = "https://demo.example.com",
-                GithubUrl = "https://github.com/your-username/project1",
-                CreatedDate = DateTime.UtcNow.AddMonths(-6),
-                IsFeatured = true
-            },
-            new ProjectInfo
-            {
-                Id = 2,
-                Title = "Task Management App",
-                Description = "Collaborative task management application with real-time updates",
-                Technologies = new List<string> { "React", "Node.js", "MongoDB", "Socket.io" },
-                ImageUrl = "assets/images/project2.jpg",
-                LiveUrl = "https://demo2.example.com",
-                GithubUrl = "https://github.com/your-username/project2",
-                CreatedDate = DateTime.UtcNow.AddMonths(-4),
-                IsFeatured = true
-            },
-            new ProjectInfo
-            {
-                Id = 3,
-                Title = "Weather Dashboard",
-                Description = "Interactive weather dashboard with data visualization",
-                Technologies = new List<string> { "Vue.js", "Python", "FastAPI", "Chart.js" },
-                ImageUrl = "assets/images/project3.jpg",
-                LiveUrl = "https://demo3.example.com",
-                GithubUrl = "https://github.com/your-username/project3",
-                CreatedDate = DateTime.UtcNow.AddMonths(-2),
-                IsFeatured = true
-            }
-        };
+            var projects = await _context.Projects
+                .OrderByDescending(p => p.CreatedDate)
+                .ToListAsync();
 
-        await Task.Delay(50); // Simulate async operation
-        return Ok(projects);
+            return Ok(projects);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving projects");
+            return StatusCode(500, "An error occurred while retrieving projects");
+        }
     }
 
     /// <summary>
@@ -71,10 +45,20 @@ public class ProjectsController : ControllerBase
     [HttpGet("featured")]
     public async Task<ActionResult<IEnumerable<ProjectInfo>>> GetFeaturedProjects()
     {
-        var allProjects = await GetProjects();
-        var projects = ((OkObjectResult)allProjects.Result!).Value as IEnumerable<ProjectInfo>;
-        
-        return Ok(projects?.Where(p => p.IsFeatured));
+        try
+        {
+            var projects = await _context.Projects
+                .Where(p => p.IsFeatured)
+                .OrderByDescending(p => p.CreatedDate)
+                .ToListAsync();
+
+            return Ok(projects);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving featured projects");
+            return StatusCode(500, "An error occurred while retrieving featured projects");
+        }
     }
 
     /// <summary>
@@ -83,16 +67,21 @@ public class ProjectsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectInfo>> GetProject(int id)
     {
-        var allProjects = await GetProjects();
-        var projects = ((OkObjectResult)allProjects.Result!).Value as IEnumerable<ProjectInfo>;
-        
-        var project = projects?.FirstOrDefault(p => p.Id == id);
-        
-        if (project == null)
+        try
         {
-            return NotFound();
-        }
+            var project = await _context.Projects.FindAsync(id);
+            
+            if (project == null)
+            {
+                return NotFound();
+            }
 
-        return Ok(project);
+            return Ok(project);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving project with ID {ProjectId}", id);
+            return StatusCode(500, "An error occurred while retrieving the project");
+        }
     }
 }
