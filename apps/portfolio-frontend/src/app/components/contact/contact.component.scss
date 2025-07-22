@@ -74,6 +74,12 @@
 
   &--error {
     border-color: $accent-color;
+    background-color: lighten($accent-color, 47%);
+  }
+
+  &--valid {
+    border-color: #28a745;
+    background-color: lighten(#28a745, 47%);
   }
 
   &::placeholder {
@@ -90,6 +96,24 @@
   color: $accent-color;
   font-size: $font-size-small;
   margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: "⚠️";
+    font-size: 0.9rem;
+  }
+}
+
+.form-success {
+  color: #28a745;
+  font-size: $font-size-small;
+  margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-weight: 500;
 }
 
 .success-message {
