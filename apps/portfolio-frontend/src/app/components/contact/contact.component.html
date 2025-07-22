@@ -27,10 +27,13 @@
                 id="name" 
                 formControlName="name"
                 class="form-input"
-                [class.form-input--error]="getFieldError('name')"
+                [class]="getFieldValidationClass('name')"
                 placeholder="Your full name">
               <div class="form-error" *ngIf="getFieldError('name')">
                 {{ getFieldError('name') }}
+              </div>
+              <div class="form-success" *ngIf="isFieldValid('name')">
+                ✓ Looks good!
               </div>
             </div>
 
@@ -41,10 +44,13 @@
                 id="email" 
                 formControlName="email"
                 class="form-input"
-                [class.form-input--error]="getFieldError('email')"
+                [class]="getFieldValidationClass('email')"
                 placeholder="your.email@example.com">
               <div class="form-error" *ngIf="getFieldError('email')">
                 {{ getFieldError('email') }}
+              </div>
+              <div class="form-success" *ngIf="isFieldValid('email')">
+                ✓ Valid email address!
               </div>
             </div>
 
@@ -55,10 +61,13 @@
                 id="subject" 
                 formControlName="subject"
                 class="form-input"
-                [class.form-input--error]="getFieldError('subject')"
+                [class]="getFieldValidationClass('subject')"
                 placeholder="What's this about?">
               <div class="form-error" *ngIf="getFieldError('subject')">
                 {{ getFieldError('subject') }}
+              </div>
+              <div class="form-success" *ngIf="isFieldValid('subject')">
+                ✓ Great subject line!
               </div>
             </div>
 
@@ -68,11 +77,14 @@
                 id="message" 
                 formControlName="message"
                 class="form-textarea"
-                [class.form-input--error]="getFieldError('message')"
+                [class]="getFieldValidationClass('message')"
                 rows="6"
                 placeholder="Tell me about your project or just say hello!"></textarea>
               <div class="form-error" *ngIf="getFieldError('message')">
                 {{ getFieldError('message') }}
+              </div>
+              <div class="form-success" *ngIf="isFieldValid('message')">
+                ✓ Perfect message length!
               </div>
             </div>
 

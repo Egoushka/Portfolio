@@ -6,6 +6,35 @@
     "version": "v1"
   },
   "paths": {
+    "/api/About": {
+      "get": {
+        "tags": [
+          "About"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutMe"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutMe"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutMe"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Blog": {
       "get": {
         "tags": [
@@ -359,6 +388,57 @@
   },
   "components": {
     "schemas": {
+      "AboutMe": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "experience": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExperienceItem"
+            },
+            "nullable": true
+          },
+          "education": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EducationItem"
+            },
+            "nullable": true
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "BlogPost": {
         "type": "object",
         "properties": {
@@ -448,6 +528,57 @@
           },
           "message": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EducationItem": {
+        "type": "object",
+        "properties": {
+          "institution": {
+            "type": "string",
+            "nullable": true
+          },
+          "degree": {
+            "type": "string",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExperienceItem": {
+        "type": "object",
+        "properties": {
+          "company": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "technologies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           }
         },

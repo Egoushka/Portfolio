@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
@@ -10,7 +10,7 @@ import { ContactMessage } from '@portfolio/generated-portfolio-api-types';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
   contactForm: FormGroup;
   isSubmitting = false;
   submitMessage = '';
@@ -21,6 +21,33 @@ export class ContactComponent {
       email: ['', [Validators.required, Validators.email]],
       subject: ['', [Validators.required, Validators.minLength(5)]],
       message: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
+
+  ngOnInit(): void {
+    // Set up real-time validation listeners
+    this.setupRealTimeValidation();
+  }
+
+  private setupRealTimeValidation(): void {
+    // Subscribe to value changes for real-time validation
+    Object.keys(this.contactForm.controls).forEach(key => {
+      const control = this.contactForm.get(key);
+      if (control) {
+        control.valueChanges.subscribe(() => {
+          // Mark as touched to trigger validation display after user starts typing
+          if (control.value && control.value.length > 0) {
+            control.markAsTouched();
+          }
+        });
+
+        // Also mark as touched when user leaves the field (blur event)
+        control.statusChanges.subscribe(() => {
+          if (control.dirty) {
+            control.markAsTouched();
+          }
+        });
+      }
     });
   }
 
@@ -62,7 +89,10 @@ export class ContactComponent {
 
   getFieldError(fieldName: string): string {
     const field = this.contactForm.get(fieldName);
-    if (field?.errors && field?.touched) {
+    
+    // Show errors in real-time: if field has been touched AND has errors
+    // OR if field is dirty (user has started typing) AND has errors
+    if (field?.errors && (field?.touched || field?.dirty)) {
       if (field.errors['required']) {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required.`;
       }
@@ -73,6 +103,26 @@ export class ContactComponent {
         const requiredLength = field.errors['minlength'].requiredLength;
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${requiredLength} characters long.`;
       }
+    }
+    return '';
+  }
+
+  // Helper methods for enhanced UX
+  isFieldValid(fieldName: string): boolean {
+    const field = this.contactForm.get(fieldName);
+    return field?.valid && (field?.touched || field?.dirty) || false;
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.contactForm.get(fieldName);
+    return field?.invalid && (field?.touched || field?.dirty) || false;
+  }
+
+  getFieldValidationClass(fieldName: string): string {
+    if (this.isFieldValid(fieldName)) {
+      return 'form-input--valid';
+    } else if (this.isFieldInvalid(fieldName)) {
+      return 'form-input--error';
     }
     return '';
   }

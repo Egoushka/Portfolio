@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Portfolio.PortfolioApi.Models;
+using System.Text.Json;
 
 namespace Portfolio.PortfolioApi.Data;
 

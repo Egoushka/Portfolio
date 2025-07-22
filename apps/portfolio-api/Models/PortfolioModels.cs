@@ -54,3 +54,33 @@ public class BlogPost
     public string? ImageUrl { get; set; }
     public string Slug { get; set; } = string.Empty;
 }
+
+public class AboutMe
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Bio { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
+    public List<string> Skills { get; set; } = new();
+    public List<ExperienceItem> Experience { get; set; } = new();
+    public List<EducationItem> Education { get; set; } = new();
+    public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+}
+
+public class ExperienceItem
+{
+    public string Company { get; set; } = string.Empty;
+    public string Position { get; set; } = string.Empty;
+    public string Period { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public List<string> Technologies { get; set; } = new();
+}
+
+public class EducationItem
+{
+    public string Institution { get; set; } = string.Empty;
+    public string Degree { get; set; } = string.Empty;
+    public string Period { get; set; } = string.Empty;
+    public string? Description { get; set; }
+}
