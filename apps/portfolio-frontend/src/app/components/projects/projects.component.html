@@ -56,7 +56,10 @@
             </div>
             
             <div class="project-links">
-              <a *ngIf="project.liveUrl" [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+              <a [routerLink]="['/projects', project.id]" class="btn btn--primary">
+                View Project
+              </a>
+              <a *ngIf="project.liveUrl" [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">
                 Live Demo
               </a>
               <a *ngIf="project.githubUrl" [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">
