@@ -1,6 +1,27 @@
 export * from './lib/generated-portfolio-api-types';
-export * from '../models/ProjectInfo';
-export * from '../models/ContactMessage';
-export * from '../models/ContactResponse';
-export * from '../apis/ProjectsApi';
-export * from '../apis/ContactApi';
+
+// Simple model interfaces
+export interface ProjectInfo {
+  id?: number;
+  title?: string | null;
+  description?: string | null;
+  technologies?: Array<string> | null;
+  imageUrl?: string | null;
+  liveUrl?: string | null;
+  githubUrl?: string | null;
+  createdDate?: Date;
+  isFeatured?: boolean;
+}
+
+export interface ContactMessage {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  createdAt?: Date;
+}
+
+export interface ContactResponse {
+  success: boolean;
+  message: string;
+}
