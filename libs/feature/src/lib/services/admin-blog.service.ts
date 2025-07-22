@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BlogPost } from '@portfolio/generated-portfolio-api-types';
-import { environment } from '../../environments/environment';
 
 export interface CreateBlogPostRequest {
   title: string;
@@ -25,8 +24,8 @@ export interface UpdateBlogPostRequest {
 @Injectable({
   providedIn: 'root'
 })
-export class BlogService {
-  private apiUrl = `${environment.apiUrl}/Blog`;
+export class AdminBlogService {
+  private readonly apiUrl = 'http://localhost:5000/api/Blog'; // Will be updated with environment
 
   constructor(private http: HttpClient) { }
 
@@ -38,24 +37,10 @@ export class BlogService {
   }
 
   /**
-   * Get blog post by slug
+   * Get blog post by ID (for editing)
    */
-  getBlogPost(slug: string): Observable<BlogPost> {
-    return this.http.get<BlogPost>(`${this.apiUrl}/${slug}`);
-  }
-
-  /**
-   * Get blog posts by tag
-   */
-  getBlogPostsByTag(tag: string): Observable<BlogPost[]> {
-    return this.http.get<BlogPost[]>(`${this.apiUrl}/tag/${tag}`);
-  }
-
-  /**
-   * Get recent blog posts
-   */
-  getRecentBlogPosts(count: number = 5): Observable<BlogPost[]> {
-    return this.http.get<BlogPost[]>(`${this.apiUrl}/recent?count=${count}`);
+  getBlogPostById(id: number): Observable<BlogPost> {
+    return this.http.get<BlogPost>(`${this.apiUrl}/${id}`);
   }
 
   /**
@@ -77,12 +62,5 @@ export class BlogService {
    */
   deleteBlogPost(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  /**
-   * Get blog post by ID (for editing)
-   */
-  getBlogPostById(id: number): Observable<BlogPost> {
-    return this.http.get<BlogPost>(`${this.apiUrl}/${id}`);
   }
 }
