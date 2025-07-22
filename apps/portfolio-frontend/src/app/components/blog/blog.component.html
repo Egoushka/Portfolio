@@ -1,0 +1,92 @@
+<main class="blog">
+  <div class="container">
+    <div class="section text--center">
+      <h1>Blog</h1>
+      <p>Thoughts, tutorials, and insights about web development and technology.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading blog posts...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage && !isLoading" class="error-container">
+      <h3>Oops! Something went wrong</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn btn--primary" (click)="retry()">Try Again</button>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && !errorMessage" class="blog-content">
+      <!-- Tag Filter -->
+      <div class="filter-section" *ngIf="allTags.length > 0">
+        <h3>Filter by Tag</h3>
+        <div class="tag-filters">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedTag === null"
+            (click)="filterByTag(null)">
+            All ({{ blogPosts.length }})
+          </button>
+          <button 
+            *ngFor="let tag of allTags"
+            class="filter-btn"
+            [class.active]="selectedTag === tag"
+            (click)="filterByTag(tag)">
+            {{ tag }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Blog Posts Grid -->
+      <div class="blog-grid" *ngIf="filteredPosts.length > 0">
+        <article *ngFor="let post of filteredPosts" class="blog-card">
+          <div class="blog-image" *ngIf="post.imageUrl">
+            <img [src]="post.imageUrl" [alt]="post.title" loading="lazy">
+          </div>
+          
+          <div class="blog-content-area">
+            <div class="blog-meta">
+              <span class="author" *ngIf="post.author">By {{ post.author }}</span>
+              <span class="date" *ngIf="post.publishedDate">{{ post.publishedDate | date:'MMM dd, yyyy' }}</span>
+            </div>
+            
+            <h2>
+              <a [routerLink]="['/blog', post.slug]" class="blog-title-link">
+                {{ post.title }}
+              </a>
+            </h2>
+            
+            <p class="blog-summary" *ngIf="post.summary">{{ post.summary }}</p>
+            
+            <div class="blog-tags" *ngIf="post.tags && post.tags.length > 0">
+              <span *ngFor="let tag of post.tags" class="tag">{{ tag }}</span>
+            </div>
+            
+            <div class="blog-actions">
+              <a [routerLink]="['/blog', post.slug]" class="read-more-btn">
+                Read More
+                <span class="arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- No Posts Message -->
+      <div *ngIf="filteredPosts.length === 0 && blogPosts.length > 0" class="no-results">
+        <h3>No blog posts found</h3>
+        <p>No posts match the selected tag filter.</p>
+        <button class="btn btn--secondary" (click)="filterByTag(null)">Show All Posts</button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="blogPosts.length === 0" class="empty-state">
+        <h3>No blog posts available</h3>
+        <p>Blog posts will be displayed here once they are published.</p>
+      </div>
+    </div>
+  </div>
+</main>

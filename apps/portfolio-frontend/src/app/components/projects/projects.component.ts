@@ -1,23 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
+import { ProjectInfo } from '@portfolio/generated-portfolio-api-types';
 
 @Component({
   selector: 'app-projects',
-  template: `
-    <main class="projects">
-      <div class="container">
-        <div class="section text--center">
-          <h1>Projects</h1>
-          <p>Explore my portfolio of web applications, tools, and experiments.</p>
-          <p><em>This page is under construction and will be enhanced in future iterations.</em></p>
-        </div>
-      </div>
-    </main>
-  `,
-  styles: [`
-    .projects {
-      min-height: 60vh;
-      padding-top: 2rem;
-    }
-  `]
+  imports: [CommonModule, RouterModule],
+  templateUrl: './projects.component.html',
+  styleUrl: './projects.component.scss'
 })
-export class ProjectsComponent {}
+export class ProjectsComponent implements OnInit {
+  projects: ProjectInfo[] = [];
+  isLoading = true;
+  errorMessage = '';
+  selectedTechnology: string | null = null;
+  allTechnologies: string[] = [];
+
+  constructor(private projectService: ProjectService) { }
+
+  ngOnInit(): void {
+    this.loadProjects();
+  }
+
+  private loadProjects(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects = projects;
+        this.extractTechnologies();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        this.errorMessage = 'Failed to load projects. Please try again later.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private extractTechnologies(): void {
+    const techSet = new Set<string>();
+    this.projects.forEach(project => {
+      project.technologies?.forEach(tech => techSet.add(tech));
+    });
+    this.allTechnologies = Array.from(techSet).sort();
+  }
+
+  get filteredProjects(): ProjectInfo[] {
+    if (!this.selectedTechnology) {
+      return this.projects;
+    }
+    return this.projects.filter(project => 
+      project.technologies?.includes(this.selectedTechnology!)
+    );
+  }
+
+  filterByTechnology(technology: string | null): void {
+    this.selectedTechnology = technology;
+  }
+
+  retry(): void {
+    this.loadProjects();
+  }
+}

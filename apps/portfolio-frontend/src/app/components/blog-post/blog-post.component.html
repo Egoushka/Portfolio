@@ -1,0 +1,75 @@
+<main class="blog-post" *ngIf="!isLoading && !errorMessage && !notFound && blogPost">
+  <div class="container">
+    <!-- Blog Post Header -->
+    <header class="blog-header">
+      <nav class="breadcrumb">
+        <a routerLink="/blog">← Back to Blog</a>
+      </nav>
+      
+      <h1>{{ blogPost.title }}</h1>
+      
+      <div class="blog-meta">
+        <div class="meta-info">
+          <span class="author" *ngIf="blogPost.author">By {{ blogPost.author }}</span>
+          <span class="date" *ngIf="blogPost.publishedDate">{{ blogPost.publishedDate | date:'MMMM dd, yyyy' }}</span>
+        </div>
+        
+        <div class="blog-tags" *ngIf="blogPost.tags && blogPost.tags.length > 0">
+          <span *ngFor="let tag of blogPost.tags" class="tag">{{ tag }}</span>
+        </div>
+      </div>
+      
+      <div class="featured-image" *ngIf="blogPost.imageUrl">
+        <img [src]="blogPost.imageUrl" [alt]="blogPost.title">
+      </div>
+    </header>
+
+    <!-- Blog Post Content -->
+    <article class="blog-content">
+      <div class="summary" *ngIf="blogPost.summary">
+        <p class="lead">{{ blogPost.summary }}</p>
+      </div>
+      
+      <div class="content" [innerHTML]="blogPost.content"></div>
+    </article>
+
+    <!-- Back to Blog -->
+    <footer class="blog-footer">
+      <a routerLink="/blog" class="back-to-blog">
+        ← Back to All Posts
+      </a>
+    </footer>
+  </div>
+</main>
+
+<!-- Loading State -->
+<div *ngIf="isLoading" class="loading-container">
+  <div class="container">
+    <div class="loading-spinner"></div>
+    <p>Loading blog post...</p>
+  </div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="errorMessage && !isLoading" class="error-container">
+  <div class="container">
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ errorMessage }}</p>
+    <div class="error-actions">
+      <button class="btn btn--primary" (click)="retry()">Try Again</button>
+      <a routerLink="/blog" class="btn btn--secondary">Back to Blog</a>
+    </div>
+  </div>
+</div>
+
+<!-- Not Found State -->
+<div *ngIf="notFound && !isLoading" class="not-found-container">
+  <div class="container">
+    <h2>Blog Post Not Found</h2>
+    <p>The blog post you're looking for doesn't exist or has been moved.</p>
+    <div class="not-found-actions">
+      <a routerLink="/blog" class="btn btn--primary">Browse All Posts</a>
+      <a routerLink="/" class="btn btn--secondary">Go Home</a>
+    </div>
+  </div>
+</div>

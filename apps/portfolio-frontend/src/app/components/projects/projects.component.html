@@ -1,0 +1,89 @@
+<main class="projects">
+  <div class="container">
+    <div class="section text--center">
+      <h1>Projects</h1>
+      <p>Explore my portfolio of web applications, tools, and experiments.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading projects...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage && !isLoading" class="error-container">
+      <h3>Oops! Something went wrong</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn btn--primary" (click)="retry()">Try Again</button>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && !errorMessage" class="projects-content">
+      <!-- Technology Filter -->
+      <div class="filter-section" *ngIf="allTechnologies.length > 0">
+        <h3>Filter by Technology</h3>
+        <div class="tech-filters">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedTechnology === null"
+            (click)="filterByTechnology(null)">
+            All ({{ projects.length }})
+          </button>
+          <button 
+            *ngFor="let tech of allTechnologies"
+            class="filter-btn"
+            [class.active]="selectedTechnology === tech"
+            (click)="filterByTechnology(tech)">
+            {{ tech }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-grid" *ngIf="filteredProjects.length > 0">
+        <div *ngFor="let project of filteredProjects" class="project-card">
+          <div class="project-image" *ngIf="project.imageUrl">
+            <img [src]="project.imageUrl" [alt]="project.title" loading="lazy">
+          </div>
+          
+          <div class="project-content">
+            <h3>{{ project.title }}</h3>
+            <p class="project-description">{{ project.description }}</p>
+            
+            <div class="technologies" *ngIf="project.technologies && project.technologies.length > 0">
+              <span *ngFor="let tech of project.technologies" class="tech-tag">{{ tech }}</span>
+            </div>
+            
+            <div class="project-links">
+              <a *ngIf="project.liveUrl" [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+                Live Demo
+              </a>
+              <a *ngIf="project.githubUrl" [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">
+                View Code
+              </a>
+            </div>
+            
+            <div class="project-meta" *ngIf="project.createdDate">
+              <small>Created: {{ project.createdDate | date:'MMM yyyy' }}</small>
+              <span *ngIf="project.isFeatured" class="featured-badge">Featured</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Projects Message -->
+      <div *ngIf="filteredProjects.length === 0 && projects.length > 0" class="no-results">
+        <h3>No projects found</h3>
+        <p>No projects match the selected technology filter.</p>
+        <button class="btn btn--secondary" (click)="filterByTechnology(null)">Show All Projects</button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="projects.length === 0" class="empty-state">
+        <h3>No projects available</h3>
+        <p>Projects will be displayed here once they are added.</p>
+      </div>
+    </div>
+  </div>
+</main>
