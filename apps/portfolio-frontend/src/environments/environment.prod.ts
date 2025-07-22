@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api.com/api' // TODO: Replace with actual production API URL
+  apiUrl: process.env.PRODUCTION_API_URL || 'https://fallback-api-url.com/api' // Use environment variable or fallback
 };
