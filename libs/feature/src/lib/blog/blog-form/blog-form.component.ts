@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
 import { BlogPost } from '@portfolio/generated-portfolio-api-types';
 import { AdminBlogService, CreateBlogPostRequest, UpdateBlogPostRequest } from '../../services/admin-blog.service';
 
 @Component({
   selector: 'app-blog-form',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, QuillModule],
   template: `
     <div class="admin-page">
       <div class="page-header">
@@ -45,13 +46,12 @@ import { AdminBlogService, CreateBlogPostRequest, UpdateBlogPostRequest } from '
 
         <div class="form-group">
           <label for="content">Content *</label>
-          <textarea 
-            id="content" 
-            formControlName="content" 
-            class="form-control content-editor"
-            rows="15"
+          <quill-editor 
+            formControlName="content"
+            [modules]="quillModules"
             placeholder="Write your blog post content here..."
-          ></textarea>
+            class="content-editor"
+          ></quill-editor>
           <div class="error" *ngIf="blogForm.get('content')?.touched && blogForm.get('content')?.errors?.['required']">
             Content is required
           </div>
@@ -168,8 +168,25 @@ import { AdminBlogService, CreateBlogPostRequest, UpdateBlogPostRequest } from '
     }
 
     .content-editor {
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      resize: vertical;
+      min-height: 300px;
+    }
+
+    .content-editor :global(.ql-editor) {
+      min-height: 250px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .content-editor :global(.ql-toolbar) {
+      border-top: 1px solid var(--gray-light);
+      border-left: 1px solid var(--gray-light);
+      border-right: 1px solid var(--gray-light);
+    }
+
+    .content-editor :global(.ql-container) {
+      border-bottom: 1px solid var(--gray-light);
+      border-left: 1px solid var(--gray-light);
+      border-right: 1px solid var(--gray-light);
     }
 
     .tags-container {
@@ -300,6 +317,25 @@ export class BlogFormComponent implements OnInit {
   isEditMode = false;
   saving = false;
   blogId?: number;
+
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'header': 1 }, { 'header': 2 }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],
+      ['link', 'image']
+    ]
+  };
 
   constructor(
     private fb: FormBuilder,

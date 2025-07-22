@@ -25,7 +25,7 @@ export interface UpdateBlogPostRequest {
   providedIn: 'root'
 })
 export class AdminBlogService {
-  private readonly apiUrl = 'http://localhost:5000/api/Blog'; // Will be updated with environment
+  private readonly apiUrl = 'http://localhost:5112/api/Blog'; // Updated to match running server
 
   constructor(private http: HttpClient) { }
 

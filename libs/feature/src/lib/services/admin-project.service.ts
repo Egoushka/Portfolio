@@ -27,7 +27,7 @@ export interface UpdateProjectRequest {
   providedIn: 'root'
 })
 export class AdminProjectService {
-  private readonly apiUrl = 'http://localhost:5000/api/Projects'; // Will be updated with environment
+  private readonly apiUrl = 'http://localhost:5112/api/Projects'; // Updated to match running server
 
   constructor(private http: HttpClient) { }
 
