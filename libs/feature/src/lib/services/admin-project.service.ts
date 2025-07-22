@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProjectInfo } from '@portfolio/generated-portfolio-api-types';
-import { environment } from '../../environments/environment';
 
 export interface CreateProjectRequest {
   title: string;
@@ -27,8 +26,8 @@ export interface UpdateProjectRequest {
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService {
-  private apiUrl = `${environment.apiUrl}/Projects`;
+export class AdminProjectService {
+  private readonly apiUrl = 'http://localhost:5112/api/Projects'; // Updated to match running server
 
   constructor(private http: HttpClient) { }
 
@@ -37,13 +36,6 @@ export class ProjectService {
    */
   getProjects(): Observable<ProjectInfo[]> {
     return this.http.get<ProjectInfo[]>(this.apiUrl);
-  }
-
-  /**
-   * Get featured projects only
-   */
-  getFeaturedProjects(): Observable<ProjectInfo[]> {
-    return this.http.get<ProjectInfo[]>(`${this.apiUrl}/featured`);
   }
 
   /**

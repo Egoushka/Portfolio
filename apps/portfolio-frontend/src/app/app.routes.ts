@@ -21,10 +21,20 @@ export const appRoutes: Route[] = [
   { path: 'contact', component: ContactComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'login', component: LoginComponent },
-  { 
-    path: 'admin', 
-    component: AdminDashboardComponent,
-    canActivate: [AuthGuard]
+  {
+    path: 'admin',
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: AdminDashboardComponent },
+      { 
+        path: 'blog',
+        loadChildren: () => import('@portfolio/admin').then(m => m.blogRoutes)
+      },
+      { 
+        path: 'projects',
+        loadChildren: () => import('@portfolio/admin').then(m => m.projectRoutes)
+      }
+    ]
   },
   { path: '**', redirectTo: '' } // Wildcard route for 404 page
 ];

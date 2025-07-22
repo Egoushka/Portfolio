@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@portfolio/admin": ["libs/feature/src/index.ts"],
       "@portfolio/generated-portfolio-api-types": [
         "libs/generated/portfolio-api-types/src/index.ts"
       ]
