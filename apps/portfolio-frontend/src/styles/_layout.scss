@@ -1,0 +1,206 @@
+@import 'variables';
+@import 'mixins';
+
+// Container and layout utilities
+.container {
+  max-width: $breakpoint-large;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  
+  @include tablet {
+    padding: 0 $spacing-lg;
+  }
+  
+  @include desktop {
+    padding: 0 $spacing-xl;
+  }
+}
+
+.section {
+  padding: $spacing-xxl 0;
+  
+  @include mobile {
+    padding: $spacing-xl 0;
+  }
+}
+
+// Grid system
+.grid {
+  display: grid;
+  gap: $spacing-lg;
+  
+  &--2-cols {
+    grid-template-columns: repeat(2, 1fr);
+    
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &--3-cols {
+    grid-template-columns: repeat(3, 1fr);
+    
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &--4-cols {
+    grid-template-columns: repeat(4, 1fr);
+    
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Flexbox utilities
+.flex {
+  display: flex;
+  
+  &--center {
+    @include flex-center;
+  }
+  
+  &--between {
+    @include flex-between;
+  }
+  
+  &--column {
+    flex-direction: column;
+  }
+  
+  &--wrap {
+    flex-wrap: wrap;
+  }
+}
+
+// Text utilities
+.text {
+  &--center {
+    text-align: center;
+  }
+  
+  &--left {
+    text-align: left;
+  }
+  
+  &--right {
+    text-align: right;
+  }
+  
+  &--primary {
+    color: $primary-color;
+  }
+  
+  &--secondary {
+    color: $secondary-color;
+  }
+  
+  &--muted {
+    color: $gray-medium;
+  }
+}
+
+// Spacing utilities
+.mt {
+  &--sm { margin-top: $spacing-sm; }
+  &--md { margin-top: $spacing-md; }
+  &--lg { margin-top: $spacing-lg; }
+  &--xl { margin-top: $spacing-xl; }
+}
+
+.mb {
+  &--sm { margin-bottom: $spacing-sm; }
+  &--md { margin-bottom: $spacing-md; }
+  &--lg { margin-bottom: $spacing-lg; }
+  &--xl { margin-bottom: $spacing-xl; }
+}
+
+.pt {
+  &--sm { padding-top: $spacing-sm; }
+  &--md { padding-top: $spacing-md; }
+  &--lg { padding-top: $spacing-lg; }
+  &--xl { padding-top: $spacing-xl; }
+}
+
+.pb {
+  &--sm { padding-bottom: $spacing-sm; }
+  &--md { padding-bottom: $spacing-md; }
+  &--lg { padding-bottom: $spacing-lg; }
+  &--xl { padding-bottom: $spacing-xl; }
+}
+
+// Button styles
+.btn {
+  @include button-reset;
+  display: inline-block;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $border-radius-sm;
+  font-family: $font-stack;
+  font-size: $font-size-base;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  @include transition();
+  @include hover-lift;
+  
+  &--primary {
+    background-color: $primary-color;
+    color: $white;
+    
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+  
+  &--secondary {
+    background-color: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: $white;
+    }
+  }
+  
+  &--large {
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-large;
+  }
+}
+
+// Card component
+.card {
+  @include card;
+  
+  &__header {
+    margin-bottom: $spacing-md;
+    
+    h3 {
+      margin: 0 0 $spacing-sm 0;
+      color: $secondary-color;
+    }
+  }
+  
+  &__content {
+    margin-bottom: $spacing-md;
+  }
+  
+  &__footer {
+    margin-top: auto;
+  }
+}

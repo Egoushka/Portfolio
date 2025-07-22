@@ -1,0 +1,71 @@
+@import 'variables';
+
+// Responsive breakpoint mixins
+@mixin mobile {
+  @media (max-width: #{$breakpoint-mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-mobile + 1px}) and (max-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-tablet + 1px}) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$breakpoint-desktop + 1px}) {
+    @content;
+  }
+}
+
+// Utility mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+@mixin hover-lift {
+  @include transition(transform);
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@mixin card {
+  background: $white;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-light;
+  padding: $spacing-lg;
+  @include transition(box-shadow);
+  
+  &:hover {
+    box-shadow: $shadow-medium;
+  }
+}

@@ -1,1 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles for Portfolio application */
+@import 'styles/variables';
+@import 'styles/mixins';
+@import 'styles/layout';
+
+// Global reset and base styles
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-stack;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  background: $background-color;
+  color: $black;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $spacing-md 0;
+  color: $secondary-color;
+  font-weight: 600;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin: 0 0 $spacing-md 0;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  @include transition(color);
+  
+  &:hover {
+    color: darken($primary-color, 15%);
+    text-decoration: underline;
+  }
+}
+
+ul, ol {
+  margin: 0 0 $spacing-md 0;
+  padding-left: $spacing-lg;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+// Form styles
+input, textarea, select {
+  font-family: $font-stack;
+  font-size: $font-size-base;
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid $gray-medium;
+  border-radius: $border-radius-sm;
+  @include transition(border-color);
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+}
+
+// Utility classes for showing/hiding content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
