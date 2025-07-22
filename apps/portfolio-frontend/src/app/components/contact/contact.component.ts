@@ -32,8 +32,7 @@ export class ContactComponent {
         name: this.contactForm.value.name,
         email: this.contactForm.value.email,
         subject: this.contactForm.value.subject,
-        message: this.contactForm.value.message,
-        createdAt: new Date()
+        message: this.contactForm.value.message
       };
 
       this.contactService.submitContactMessage(contactMessage).subscribe({
