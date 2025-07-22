@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AboutService } from '../../services/about.service';
 import { AboutMe } from '@portfolio/generated-portfolio-api-types';
 
@@ -18,7 +19,7 @@ import { AboutMe } from '@portfolio/generated-portfolio-api-types';
           <button (click)="retry()" class="btn btn-primary">Try Again</button>
         </div>
 
-        <div *ngIf="aboutData && !isLoading && !errorMessage" class="about-content">
+        <div *ngIf="aboutData && !isLoading && !errorMessage" class="about-content" [@fadeIn]>
           <!-- Hero Section -->
           <section class="hero-section">
             <div class="hero-content">
@@ -46,16 +47,19 @@ import { AboutMe } from '@portfolio/generated-portfolio-api-types';
           <!-- Experience Section -->
           <section class="experience-section">
             <h2>Professional Experience</h2>
-            <div class="experience-list">
-              <div *ngFor="let exp of aboutData.experience" class="experience-item">
-                <div class="experience-header">
-                  <h3>{{ exp.position }}</h3>
-                  <span class="company">{{ exp.company }}</span>
-                  <span class="period">{{ exp.period }}</span>
-                </div>
-                <p class="description">{{ exp.description }}</p>
-                <div class="technologies">
-                  <span *ngFor="let tech of exp.technologies" class="tech-tag">{{ tech }}</span>
+            <div class="timeline">
+              <div *ngFor="let exp of aboutData.experience; let i = index" class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <h3>{{ exp.position }}</h3>
+                    <span class="company">{{ exp.company }}</span>
+                    <span class="period">{{ exp.period }}</span>
+                  </div>
+                  <p class="description">{{ exp.description }}</p>
+                  <div class="technologies" *ngIf="exp.technologies?.length">
+                    <span *ngFor="let tech of exp.technologies" class="tech-tag">{{ tech }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -64,14 +68,17 @@ import { AboutMe } from '@portfolio/generated-portfolio-api-types';
           <!-- Education Section -->
           <section class="education-section">
             <h2>Education</h2>
-            <div class="education-list">
-              <div *ngFor="let edu of aboutData.education" class="education-item">
-                <div class="education-header">
-                  <h3>{{ edu.degree }}</h3>
-                  <span class="institution">{{ edu.institution }}</span>
-                  <span class="period">{{ edu.period }}</span>
+            <div class="timeline">
+              <div *ngFor="let edu of aboutData.education; let i = index" class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <h3>{{ edu.degree }}</h3>
+                    <span class="institution">{{ edu.institution }}</span>
+                    <span class="period">{{ edu.period }}</span>
+                  </div>
+                  <p *ngIf="edu.description" class="description">{{ edu.description }}</p>
                 </div>
-                <p *ngIf="edu.description" class="description">{{ edu.description }}</p>
               </div>
             </div>
           </section>
@@ -156,25 +163,64 @@ import { AboutMe } from '@portfolio/generated-portfolio-api-types';
       font-weight: 500;
     }
 
-    .experience-list, .education-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
+    /* Timeline Styles */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
     }
 
-    .experience-item, .education-item {
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 2rem;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      background: var(--primary-color);
+      border: 3px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1;
+    }
+
+    .timeline-content {
       background: white;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       border-left: 4px solid var(--primary-color);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .experience-header, .education-header {
+    .timeline-content:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .timeline-header {
       margin-bottom: 1rem;
     }
 
-    .experience-header h3, .education-header h3 {
+    .timeline-header h3 {
       font-size: 1.3rem;
       color: var(--secondary-color);
       margin-bottom: 0.5rem;
@@ -222,11 +268,35 @@ import { AboutMe } from '@portfolio/generated-portfolio-api-types';
         font-size: 2.5rem;
       }
 
-      .experience-item, .education-item {
+      .timeline {
+        padding-left: 1.5rem;
+      }
+
+      .timeline::before {
+        left: 0.75rem;
+      }
+
+      .timeline-item {
+        padding-left: 1.5rem;
+      }
+
+      .timeline-marker {
+        left: -1.5rem;
+      }
+
+      .timeline-content {
         padding: 1.5rem;
       }
     }
-  `]
+  `],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class AboutComponent implements OnInit {
   aboutData: AboutMe | null = null;
@@ -249,8 +319,8 @@ export class AboutComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading about data:', error);
-        this.errorMessage = 'Failed to load about information. Please try again later.';
+        // Global error interceptor will handle the notification
+        this.errorMessage = 'Failed to load about information.';
         this.isLoading = false;
       }
     });

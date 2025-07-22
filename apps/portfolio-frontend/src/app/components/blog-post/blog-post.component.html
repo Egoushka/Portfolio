@@ -30,7 +30,9 @@
         <p class="lead">{{ blogPost.summary }}</p>
       </div>
       
-      <div class="content" [innerHTML]="blogPost.content"></div>
+      <div class="content">
+        <markdown [data]="blogPost.content"></markdown>
+      </div>
     </article>
 
     <!-- Back to Blog -->

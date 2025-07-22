@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
 import { BlogService } from '../../services/blog.service';
 import { BlogPost } from '@portfolio/generated-portfolio-api-types';
 
 @Component({
   selector: 'app-blog-post',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MarkdownModule],
   templateUrl: './blog-post.component.html',
   styleUrl: './blog-post.component.scss'
 })
