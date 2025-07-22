@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ContactService } from '../../services/contact.service';
+import { ContactMessage } from '@portfolio/generated-portfolio-api-types';
 
 @Component({
   selector: 'app-contact',
@@ -13,7 +15,7 @@ export class ContactComponent {
   isSubmitting = false;
   submitMessage = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private contactService: ContactService) {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
@@ -26,12 +28,17 @@ export class ContactComponent {
     if (this.contactForm.valid) {
       this.isSubmitting = true;
       
-      // Submit form data to the backend API
-      const apiUrl = 'https://example.com/api/contact'; // Replace with actual API endpoint
-      this.http.post(apiUrl, this.contactForm.value).subscribe({
+      const contactMessage: ContactMessage = {
+        name: this.contactForm.value.name,
+        email: this.contactForm.value.email,
+        subject: this.contactForm.value.subject,
+        message: this.contactForm.value.message
+      };
+
+      this.contactService.submitContactMessage(contactMessage).subscribe({
         next: (response) => {
           console.log('Form submitted successfully:', response);
-          this.submitMessage = 'Thank you for your message! I will get back to you soon.';
+          this.submitMessage = response.message || 'Thank you for your message! I will get back to you soon.';
           this.contactForm.reset();
           this.isSubmitting = false;
         },

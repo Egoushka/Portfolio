@@ -4,14 +4,14 @@
   "targets": {
     "build": {
       "executor": "nx:noop",
-      "outputs": ["libs/generated/portfolio-api-swagger"]
+      "outputs": []
     },
     "codegen": {
       "executor": "@nx-dotnet/core:openapi-codegen",
       "options": {
         "useOpenApiGenerator": true,
         "openApiGenerator": "typescript",
-        "openapiJsonPath": "libs/generated/portfolio-api-swagger",
+        "openapiJsonPath": "libs/generated/portfolio-api-swagger/swagger.json",
         "outputProject": "generated-portfolio-api-types"
       },
       "dependsOn": ["swagger"],
