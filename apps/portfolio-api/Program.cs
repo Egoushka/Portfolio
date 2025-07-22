@@ -1,6 +1,9 @@
 using Portfolio.PortfolioApi.Services;
 using Portfolio.PortfolioApi.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,33 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add custom services
 builder.Services.AddScoped<IContactService, ContactService>();
+
+// Add JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var jwtKey = builder.Configuration["Jwt:Key"] ?? "super-secret-jwt-key-that-should-be-changed-in-production";
+    var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "portfolio-api";
+    var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "portfolio-frontend";
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // Add CORS for Angular frontend
 builder.Services.AddCors(options =>
@@ -58,6 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

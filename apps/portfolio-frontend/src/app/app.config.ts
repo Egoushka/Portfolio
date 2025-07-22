@@ -10,6 +10,7 @@ import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@an
 import { MarkdownModule } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
 import { errorInterceptor } from './interceptors/error-interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimations(),
-    provideHttpClient(withInterceptors([errorInterceptor]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor]), withInterceptorsFromDi()),
     importProvidersFrom(MarkdownModule.forRoot()),
   ],
 };
