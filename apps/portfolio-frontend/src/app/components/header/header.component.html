@@ -1,0 +1,76 @@
+<header class="header">
+  <div class="container">
+    <nav class="navbar">
+      <!-- Logo/Brand -->
+      <div class="navbar__brand">
+        <a routerLink="/" class="brand-link">
+          <h1 class="brand-title">Portfolio</h1>
+        </a>
+      </div>
+
+      <!-- Mobile menu toggle -->
+      <button 
+        class="mobile-menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-label="Toggle navigation menu">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <ul class="navbar__nav" [class.navbar__nav--open]="isMenuOpen">
+        <li class="nav-item">
+          <a routerLink="/" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{exact: true}"
+             (click)="closeMenu()"
+             class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/about" 
+             routerLinkActive="active"
+             (click)="closeMenu()"
+             class="nav-link">About</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/projects" 
+             routerLinkActive="active"
+             (click)="closeMenu()"
+             class="nav-link">Projects</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/blog" 
+             routerLinkActive="active"
+             (click)="closeMenu()"
+             class="nav-link">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/contact" 
+             routerLinkActive="active"
+             (click)="closeMenu()"
+             class="nav-link">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Social Links -->
+      <div class="navbar__social">
+        <a href="https://linkedin.com/in/your-profile" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="social-link"
+           aria-label="LinkedIn Profile">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="https://github.com/your-username" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="social-link"
+           aria-label="GitHub Profile">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>

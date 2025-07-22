@@ -1,0 +1,140 @@
+<main class="home">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__content">
+        <div class="hero__text">
+          <h1 class="hero__title">
+            Hi, I'm <span class="text--primary">Your Name</span>
+          </h1>
+          <h2 class="hero__subtitle">Full-Stack Developer</h2>
+          <p class="hero__description">
+            I create innovative web applications and digital solutions that 
+            combine beautiful design with powerful functionality. Passionate 
+            about modern technologies and clean, maintainable code.
+          </p>
+          <div class="hero__actions">
+            <a routerLink="/projects" class="btn btn--primary btn--large">
+              View My Work
+            </a>
+            <a routerLink="/contact" class="btn btn--secondary btn--large">
+              Get In Touch
+            </a>
+          </div>
+          <div class="hero__social">
+            <a href="https://linkedin.com/in/your-profile" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-link"
+               aria-label="LinkedIn Profile">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/your-username" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-link"
+               aria-label="GitHub Profile">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:your.email@example.com" 
+               class="social-link"
+               aria-label="Send Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <div class="profile-image">
+            <img src="assets/images/profile.jpg" 
+                 alt="Your Name - Full-Stack Developer"
+                 class="profile-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="skills section">
+    <div class="container">
+      <h2 class="section-title text--center">Skills & Technologies</h2>
+      <div class="skills__grid">
+        <div *ngFor="let skill of skills" class="skill-item">
+          <span class="skill-name">{{ skill }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section class="featured-projects section">
+    <div class="container">
+      <div class="section-header text--center">
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-description">
+          Here are some of my recent projects that showcase my skills and experience.
+        </p>
+      </div>
+      <div class="projects__grid">
+        <div *ngFor="let project of featuredProjects" class="project-card">
+          <div class="project-card__image">
+            <img [src]="project.image" 
+                 [alt]="project.title"
+                 class="project-img">
+            <div class="project-card__overlay">
+              <div class="project-links">
+                <a [href]="project.liveUrl" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="btn btn--primary btn--small">
+                  Live Demo
+                </a>
+                <a [href]="project.githubUrl" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="btn btn--secondary btn--small">
+                  <i class="fab fa-github"></i> Code
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="project-card__content">
+            <h3 class="project-title">{{ project.title }}</h3>
+            <p class="project-description">{{ project.description }}</p>
+            <div class="project-technologies">
+              <span *ngFor="let tech of project.technologies" 
+                    class="tech-tag">{{ tech }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-footer text--center">
+        <a routerLink="/projects" class="btn btn--primary">
+          View All Projects
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta section">
+    <div class="container">
+      <div class="cta__content text--center">
+        <h2 class="cta__title">Ready to work together?</h2>
+        <p class="cta__description">
+          Let's discuss your project and bring your ideas to life.
+        </p>
+        <div class="cta__actions">
+          <a routerLink="/contact" class="btn btn--primary btn--large">
+            Start a Project
+          </a>
+          <a href="assets/resume.pdf" 
+             download 
+             class="btn btn--secondary btn--large">
+            Download Resume
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
