@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-contact',
@@ -13,7 +14,7 @@ export class ContactComponent {
   isSubmitting = false;
   submitMessage = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
@@ -29,13 +30,13 @@ export class ContactComponent {
       // Submit form data to the backend API
       const apiUrl = 'https://example.com/api/contact'; // Replace with actual API endpoint
       this.http.post(apiUrl, this.contactForm.value).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           console.log('Form submitted successfully:', response);
           this.submitMessage = 'Thank you for your message! I will get back to you soon.';
           this.contactForm.reset();
           this.isSubmitting = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error submitting form:', error);
           this.submitMessage = 'An error occurred while submitting the form. Please try again later.';
           this.isSubmitting = false;
