@@ -26,13 +26,21 @@ export class ContactComponent {
     if (this.contactForm.valid) {
       this.isSubmitting = true;
       
-      // Simulate form submission (replace with actual API call)
-      setTimeout(() => {
-        console.log('Form submitted:', this.contactForm.value);
-        this.submitMessage = 'Thank you for your message! I will get back to you soon.';
-        this.contactForm.reset();
-        this.isSubmitting = false;
-      }, 2000);
+      // Submit form data to the backend API
+      const apiUrl = 'https://example.com/api/contact'; // Replace with actual API endpoint
+      this.http.post(apiUrl, this.contactForm.value).subscribe({
+        next: (response) => {
+          console.log('Form submitted successfully:', response);
+          this.submitMessage = 'Thank you for your message! I will get back to you soon.';
+          this.contactForm.reset();
+          this.isSubmitting = false;
+        },
+        error: (error) => {
+          console.error('Error submitting form:', error);
+          this.submitMessage = 'An error occurred while submitting the form. Please try again later.';
+          this.isSubmitting = false;
+        }
+      });
     } else {
       this.markFormGroupTouched();
     }
